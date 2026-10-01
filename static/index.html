@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhytoExplain 3.0 | Tri-Branch Explainable Medicinal Plant Identification (Swin-T + VMamba + MaxViT-T)</title>
+  <meta name="description" content="Final-year academic deep learning project: Explainable medicinal plant identification fusing Swin-T, VMamba-T (State Space), and MaxViT-T (Multi-Axis) with Tri-Cross-Attention Fusion." />
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">PhytoExplain 3.0</span>
+          <span class="brand-subtitle">Tri-Branch Explainable Botanical AI</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#studio" class="nav-item active">Diagnostic Studio</a>
+        <a href="#xai-view" class="nav-item">Tri-XAI Pentad View</a>
+        <a href="#health-grading" class="nav-item">Foliar Health &amp; Purity</a>
+        <a href="#formulations-view" class="nav-item">Polyherbal Prescriptions</a>
+        <a href="#sandbox-studio" class="nav-item">Polyherbal Sandbox</a>
+        <a href="#monograph" class="nav-item">Pharmacopeia</a>
+        <a href="#benchmark" class="nav-item">Benchmarks</a>
+      </nav>
+
+      <div class="header-badges">
+        <span class="badge badge-accent">Swin-T + VMamba + MaxViT</span>
+        <span class="badge badge-status" id="system-status-indicator">
+          <span class="status-dot"></span> Online
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="main-content">
+    
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-tag">
+        <span class="tag-icon">🌿</span> Final Year Academic Project &middot; Tri-Paradigm Botanical Vision
+      </div>
+      <h1 class="hero-title">
+        Tri-Branch Explainable Medicinal Plant Identification via <span class="gradient-text">Swin-T, VMamba &amp; MaxViT-T</span>
+      </h1>
+      <p class="hero-description">
+        Novel multi-paradigm architecture unifying <strong>Shifted-Window Attention (Swin-T)</strong> for foliar boundaries, <strong>2D Visual State Space Models (VMamba-T)</strong> for continuous directional venation pathways, and <strong>Multi-Axis Attention (MaxViT-T)</strong> for dense trichome textures and global symmetry, fused via <strong>Tri-Branch Cross-Attention with Dynamic Softmax Routing</strong>.
+      </p>
+      
+      <div class="metric-ribbon">
+        <div class="ribbon-card">
+          <span class="ribbon-val" id="stat-swin">Swin-T</span>
+          <span class="ribbon-label">Branch 1: Window ViT (Margins)</span>
+        </div>
+        <div class="ribbon-card">
+          <span class="ribbon-val" id="stat-mamba">VMamba-T</span>
+          <span class="ribbon-label">Branch 2: Visual SSM (Venation)</span>
+        </div>
+        <div class="ribbon-card">
+          <span class="ribbon-val" id="stat-maxvit">MaxViT-T</span>
+          <span class="ribbon-label">Branch 3: Multi-Axis (Block/Grid)</span>
+        </div>
+        <div class="ribbon-card">
+          <span class="ribbon-val" id="stat-classes">40 Species</span>
+          <span class="ribbon-label">Ayurvedic Monograph Database</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Foliar Diagnostic Studio -->
+    <section id="studio" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Foliar Diagnostic Studio</h2>
+          <p class="section-subtitle">Upload a plant specimen or select from the 40 verified botanical herbarium species</p>
+        </div>
+      </div>
+
+      <div class="studio-grid">
+        <!-- Upload / Dropzone Card -->
+        <div class="glass-card upload-card">
+          <div class="dropzone" id="leaf-dropzone">
+            <input type="file" id="leaf-file-input" accept="image/*" style="display: none;" />
+            <div class="dropzone-content" id="dropzone-prompt">
+              <div class="upload-icon-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </div>
+              <h3 class="dropzone-title">Drag &amp; Drop Foliar Specimen</h3>
+              <p class="dropzone-text">Supports JPG, PNG, WEBP &middot; Up to 15MB</p>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-browse-file">Browse Computer</button>
+            </div>
+            
+            <div class="dropzone-preview" id="dropzone-preview" style="display: none;">
+              <img id="preview-img" src="" alt="Selected leaf specimen" />
+              <button type="button" class="btn-clear-preview" id="btn-clear-preview" title="Remove image">&times;</button>
+            </div>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="studio-controls">
+            <div class="control-field">
+              <label for="colormap-select" class="field-label">XAI Colormap</label>
+              <select id="colormap-select" class="custom-select">
+                <option value="turbo" selected>Turbo (High Contrast)</option>
+                <option value="jet">Jet (Classic Scientific)</option>
+                <option value="viridis">Viridis (Perceptual Uniform)</option>
+                <option value="inferno">Inferno (Thermal Density)</option>
+              </select>
+            </div>
+
+            <div class="control-field">
+              <div class="field-header-row">
+                <label for="alpha-slider" class="field-label">Overlay Opacity</label>
+                <span class="slider-value" id="alpha-val">55%</span>
+              </div>
+              <input type="range" id="alpha-slider" min="0.1" max="0.95" step="0.05" value="0.55" class="custom-slider" />
+            </div>
+
+            <button type="button" class="btn btn-primary btn-block" id="btn-run-diagnosis">
+              <span class="btn-icon">⚡</span> Run Tri-Branch Botanical Diagnostic
+            </button>
+          </div>
+        </div>
+
+        <!-- Sample Leaf Gallery Selector -->
+        <div class="glass-card samples-card">
+          <div class="card-header-bar">
+            <h3 class="card-title">Botanical Herbarium Catalog (40 Species)</h3>
+            <span class="card-badge">Instant 1-Click Evaluation</span>
+          </div>
+          <p class="samples-desc">Select any of the 40 medicinal plant species below to trigger a live multi-paradigm diagnosis:</p>
+          
+          <div class="samples-grid" id="samples-container">
+            <!-- Dynamically populated via JS -->
+            <div class="sample-skeleton"></div>
+            <div class="sample-skeleton"></div>
+            <div class="sample-skeleton"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Tri-XAI Pentad-View (5-Panel) & Classification Output -->
+    <section id="xai-view" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Tri-Branch Explainable AI (Tri-XAI) Pentad View</h2>
+          <p class="section-subtitle">Multi-perspective visual explanation decomposing Swin-T window geometry, VMamba 2D state-space venation, MaxViT multi-axis textures, and the consensus fused decision</p>
+        </div>
+      </div>
+
+      <!-- Out-of-Distribution / Uncertainty Alert Banner -->
+      <div class="ood-alert-banner" id="ood-banner" style="display: none;">
+        <div class="ood-icon-wrap">⚠️</div>
+        <div class="ood-content">
+          <div class="ood-title-row">
+            <span class="ood-title">Uncertain Botanical Specimen / Out-of-Catalog Warning</span>
+            <span class="ood-tag" id="ood-tag-status">Low Confidence (&lt;45%)</span>
+          </div>
+          <p class="ood-text" id="ood-text-desc">
+            The neural backbones detected atypical or ambiguous foliar characteristics. This specimen may belong to an uncataloged botanical species (such as <strong>Turmeric / Curcuma longa</strong>) or contains background occlusion.
+          </p>
+          <div class="ood-tips">
+            <span class="ood-tip-item">🔍 Check leaf venation against monograph</span>
+            <span class="ood-tip-item">📷 Capture leaf flat on neutral background</span>
+            <span class="ood-tip-item">🌿 40 Ayurvedic species currently cataloged</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Diagnostic Result Ribbon -->
+      <div class="glass-card result-hero-card" id="result-hero" style="display: none;">
+        <div class="result-hero-left">
+          <div class="result-species-badge">Identified Botanical Specimen</div>
+          <h2 class="result-species-title" id="res-common-name">&mdash;</h2>
+          <div class="result-species-sub">
+            <span class="scientific-name" id="res-scientific-name">&mdash;</span> &middot; 
+            <span class="family-name" id="res-family-name">&mdash;</span>
+          </div>
+          <div id="res-tier-badge-container"></div>
+        </div>
+
+        <div class="result-hero-metrics">
+          <div class="res-stat-box">
+            <span class="res-stat-num" id="res-confidence">&mdash;%</span>
+            <span class="res-stat-lbl">Diagnostic Confidence</span>
+          </div>
+          <div class="res-stat-box">
+            <span class="res-stat-num" id="res-faithfulness">&mdash;%</span>
+            <span class="res-stat-lbl">XAI Faithfulness Drop</span>
+          </div>
+          <div class="res-stat-box">
+            <span class="res-stat-num" id="res-branch-ratio">&mdash;</span>
+            <span class="res-stat-lbl">Swin : Mamba : MaxViT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pentad-View (5-Panel) Visualizer Grid -->
+      <div class="pentad-grid" id="pentad-grid">
+        <!-- Panel 1: Original Specimen -->
+        <div class="glass-card quad-card">
+          <div class="quad-header">
+            <span class="quad-badge badge-orig">Panel 1</span>
+            <h4 class="quad-title">Original Specimen</h4>
+          </div>
+          <div class="quad-img-wrap">
+            <img id="img-orig" src="/static/samples/Neem.jpg" alt="Original Specimen" />
+          </div>
+          <div class="quad-footer">
+            <span class="quad-tag">Natural Foliar</span>
+            <span class="quad-caption">Input 224&times;224 RGB image</span>
+          </div>
+        </div>
+
+        <!-- Panel 2: Swin-T LayerCAM -->
+        <div class="glass-card quad-card">
+          <div class="quad-header">
+            <span class="quad-badge badge-swin">Panel 2 &middot; Swin-T</span>
+            <h4 class="quad-title">Swin-T LayerCAM</h4>
+          </div>
+          <div class="quad-img-wrap">
+            <img id="img-swin" src="/static/samples/Neem.jpg" alt="Swin LayerCAM" />
+          </div>
+          <div class="quad-footer">
+            <span class="quad-tag tag-swin" id="tag-swin-weight">Weight: 33.3%</span>
+            <span class="quad-caption">Shifted window margins &amp; leaf contour</span>
+          </div>
+        </div>
+
+        <!-- Panel 3: VMamba State-CAM -->
+        <div class="glass-card quad-card">
+          <div class="quad-header">
+            <span class="quad-badge badge-mamba">Panel 3 &middot; VMamba</span>
+            <h4 class="quad-title">VMamba SSM CAM</h4>
+          </div>
+          <div class="quad-img-wrap">
+            <img id="img-mamba" src="/static/samples/Neem.jpg" alt="VMamba State-CAM" />
+          </div>
+          <div class="quad-footer">
+            <span class="quad-tag tag-mamba" id="tag-mamba-weight">Weight: 33.3%</span>
+            <span class="quad-caption">Continuous 2D selective scan venation</span>
+          </div>
+        </div>
+
+        <!-- Panel 4: MaxViT Multi-Axis CAM -->
+        <div class="glass-card quad-card">
+          <div class="quad-header">
+            <span class="quad-badge badge-maxvit">Panel 4 &middot; MaxViT-T</span>
+            <h4 class="quad-title">MaxViT-T Multi-Axis</h4>
+          </div>
+          <div class="quad-img-wrap">
+            <img id="img-maxvit" src="/static/samples/Neem.jpg" alt="MaxViT CAM" />
+          </div>
+          <div class="quad-footer">
+            <span class="quad-tag tag-maxvit" id="tag-maxvit-weight">Weight: 33.3%</span>
+            <span class="quad-caption">Block micro-textures &amp; grid symmetry</span>
+          </div>
+        </div>
+
+        <!-- Panel 5: Tri-Fused Consensus -->
+        <div class="glass-card quad-card highlight-card">
+          <div class="quad-header">
+            <span class="quad-badge badge-fused">Panel 5 &middot; Proposed SOTA</span>
+            <h4 class="quad-title">Tri-Fused Consensus</h4>
+          </div>
+          <div class="quad-img-wrap">
+            <img id="img-fused" src="/static/samples/Neem.jpg" alt="Tri-Fused Saliency" />
+          </div>
+          <div class="quad-footer">
+            <span class="quad-tag tag-fused" id="tag-fused-status">Tri-Cross-Attention</span>
+            <span class="quad-caption">Unified botanical decision map</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top-3 Confidence Ranking Bar Charts -->
+      <div class="glass-card ranking-card">
+        <h3 class="card-title">Top-3 Diagnostic Probability Distribution</h3>
+        <div class="prob-bars-container" id="prob-bars-list">
+          <div class="prob-row-skeleton"></div>
+          <div class="prob-row-skeleton"></div>
+          <div class="prob-row-skeleton"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Foliar Health & Medicinal Purity Assessment -->
+    <section id="health-grading" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Foliar Health &amp; Medicinal Purity Assessment</h2>
+          <p class="section-subtitle">Multi-spectral computer vision tissue segmentation evaluating active parenchyma, chlorosis, and necrosis for pharmaceutical clearance</p>
+        </div>
+      </div>
+
+      <div class="health-section-grid">
+        <!-- Purity & Grade Summary Card -->
+        <div class="glass-card purity-hero-card">
+          <div class="purity-header-row">
+            <div>
+              <span class="card-badge">Pharmaceutical Quality Control</span>
+              <h3 class="card-title" style="margin-top: 0.35rem;">Medicinal Harvest Clearance</h3>
+            </div>
+            <span class="grade-badge-large grade-a" id="pharma-grade-badge">Grade A (Optimal)</span>
+          </div>
+
+          <div class="purity-metric-center">
+            <div class="purity-score-num">
+              <span id="purity-score-val">94.2</span><span>%</span>
+            </div>
+            <div class="purity-desc-wrap">
+              <div class="purity-status-title" id="purity-status-title">Optimal Therapeutic Quality</div>
+              <p class="purity-rec-text" id="purity-rec-text">
+                Intact active foliar parenchyma with optimal active phytochemical density. Approved for Ayurvedic extracts, Kwatha decoctions, and Churna powders.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tissue Breakdown Progress Bars -->
+          <div class="tissue-breakdown-container">
+            <div class="tissue-bar-row">
+              <div class="tissue-bar-labels">
+                <span>🌿 Healthy Parenchyma</span>
+                <span id="pct-healthy-val">94.2%</span>
+              </div>
+              <div class="tissue-bar-track">
+                <div class="tissue-bar-fill-healthy" id="bar-healthy" style="width: 94.2%;"></div>
+              </div>
+            </div>
+
+            <div class="tissue-bar-row">
+              <div class="tissue-bar-labels">
+                <span>🟡 Chlorosis (Chlorophyll Depletion)</span>
+                <span id="pct-chlorosis-val">3.1%</span>
+              </div>
+              <div class="tissue-bar-track">
+                <div class="tissue-bar-fill-chlorosis" id="bar-chlorosis" style="width: 3.1%;"></div>
+              </div>
+            </div>
+
+            <div class="tissue-bar-row">
+              <div class="tissue-bar-labels">
+                <span>🔴 Necrosis / Fungal Lesions / Rot</span>
+                <span id="pct-necrosis-val">2.7%</span>
+              </div>
+              <div class="tissue-bar-track">
+                <div class="tissue-bar-fill-necrosis" id="bar-necrosis" style="width: 2.7%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Health Segmentation Map -->
+        <div class="glass-card health-overlay-card">
+          <div class="card-header-bar">
+            <h3 class="card-title">Colorimetric Tissue Pathology Mask</h3>
+            <span class="card-badge">Multi-Spectral Vision</span>
+          </div>
+          <div class="health-overlay-img-wrap">
+            <img id="img-health-overlay" src="/static/samples/Neem.jpg" alt="Tissue Pathology Overlay" />
+          </div>
+          <div class="health-legend-row">
+            <span class="legend-item"><span class="legend-dot dot-green"></span> Healthy Tissue</span>
+            <span class="legend-item"><span class="legend-dot dot-yellow"></span> Chlorosis (Faded)</span>
+            <span class="legend-item"><span class="legend-dot dot-red"></span> Necrosis / Lesions</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Clinical Polyherbal Formulations & Real-World Disease Cures -->
+    <section id="formulations-view" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Clinical Polyherbal Formulations &amp; Real-World Disease Prescriptions</h2>
+          <p class="section-subtitle">Classical Ayurvedic multi-herb synergy formulations unlocked automatically when foliar quality is approved</p>
+        </div>
+      </div>
+
+      <!-- Container for dynamic formulation cards or safety lockout banner -->
+      <div id="formulations-dynamic-container">
+        <div class="formulations-container" id="formulations-cards-list">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Polyherbal Sandbox Studio -->
+    <section id="sandbox-studio" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Interactive Polyherbal Synergy Sandbox</h2>
+          <p class="section-subtitle">Mix and match any 2 to 5 medicinal plants from the 40-herb catalog to compute real-time Tridosha balance, shared phytochemical matrices, and custom compound formulations</p>
+        </div>
+      </div>
+
+      <div class="glass-card sandbox-card">
+        <div class="sandbox-layout">
+          <!-- Left: Herb Multi-Selector Picker -->
+          <div class="herb-picker-column">
+            <div class="herb-picker-header">
+              <h4 class="card-title">Select Medicinal Plants</h4>
+              <button type="button" class="btn btn-sm btn-secondary" id="btn-clear-sandbox">Reset Selection</button>
+            </div>
+            <p class="samples-desc" style="margin-bottom: 0.75rem;">Click herbs to toggle in/out of the synergistic compound formulation:</p>
+            <div class="herb-picker-grid" id="sandbox-herb-grid">
+              <!-- Dynamically populated chips -->
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="btn-synthesize-synergy" style="margin-top: 1rem;">
+              <span class="btn-icon">🧪</span> Synthesize Polyherbal Formulation
+            </button>
+          </div>
+
+          <!-- Right: Live Synergy Result & Tridosha Radar -->
+          <div class="sandbox-result-wrap" id="sandbox-result-container">
+            <div class="synergy-card">
+              <span class="card-badge" id="sandbox-selected-count">3 Herbs Selected</span>
+              <h3 class="synergy-title" id="sandbox-compound-title" style="margin-top: 0.4rem;">Neem + Tulasi + Amla Compound</h3>
+              
+              <div class="tridosha-meter-grid">
+                <div class="dosha-box">
+                  <div class="dosha-name">Vata Balance</div>
+                  <div class="dosha-val dosha-vata" id="dosha-val-vata">-15.0</div>
+                </div>
+                <div class="dosha-box">
+                  <div class="dosha-name">Pitta Balance</div>
+                  <div class="dosha-val dosha-pitta" id="dosha-val-pitta">-25.0</div>
+                </div>
+                <div class="dosha-box">
+                  <div class="dosha-name">Kapha Balance</div>
+                  <div class="dosha-val dosha-kapha" id="dosha-val-kapha">-31.7</div>
+                </div>
+              </div>
+
+              <div class="form-section-title"><span class="box-icon">🎯</span> Shared Target Disease Synergies</div>
+              <div class="disease-tags-row" id="sandbox-diseases-list">
+                <span class="disease-chip">Dermatoses &amp; Psoriasis</span>
+                <span class="disease-chip">Type-2 Diabetes &amp; Glycemic Regulation</span>
+                <span class="disease-chip">Upper Respiratory Infections</span>
+              </div>
+
+              <div class="form-section-title"><span class="box-icon">🔬</span> Combined Bioactive Phytochemical Matrix</div>
+              <div class="synergy-pills-row" id="sandbox-phytos-list">
+                <span class="phytomatrix-pill">Azadirachtin</span>
+                <span class="phytomatrix-pill">Eugenol</span>
+                <span class="phytomatrix-pill">Ascorbic Acid (Vit C)</span>
+                <span class="phytomatrix-pill">Rosmarinic Acid</span>
+                <span class="phytomatrix-pill">Gallic Acid</span>
+              </div>
+
+              <div class="form-details-box" id="sandbox-recipe-text">
+                <strong>Classical Preparation Protocol:</strong> Blend equal proportions (1:1:1) of clean shade-dried leaves. Prepare as a fresh concentrated Kwatha (10g in 160ml water reduced to 40ml) or micropowder Churna.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Pharmacological Monograph -->
+    <section id="monograph" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Pharmacological &amp; Ayurvedic Pharmacopeia</h2>
+          <p class="section-subtitle">Verified bioactive phytochemicals, therapeutic mechanisms, and clinical indications for all 40 medicinal plant species</p>
+        </div>
+      </div>
+
+      <div class="glass-card monograph-card" id="monograph-details">
+        <div class="mono-header-grid">
+          <div class="mono-meta-col">
+            <span class="mono-family" id="mono-family">Meliaceae Family</span>
+            <h2 class="mono-common" id="mono-common">Neem</h2>
+            <p class="mono-scientific" id="mono-scientific"><em>Azadirachta indica</em></p>
+            <p class="mono-ayurveda" id="mono-ayurveda">Ayurvedic Nomenclature: <strong id="mono-ayur-name">Nimba</strong></p>
+          </div>
+
+          <div class="mono-vernacular-col">
+            <h4 class="mono-subhead">Vernacular Indian Names</h4>
+            <div class="vernacular-tags" id="mono-vernacular-tags">
+              <span class="v-tag">Hindi: Neem</span>
+              <span class="v-tag">Tamil: Veppai</span>
+              <span class="v-tag">Telugu: Vepa</span>
+              <span class="v-tag">Kannada: Bevu</span>
+              <span class="v-tag">Sanskrit: Nimba</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mono-divider"></div>
+
+        <div class="mono-sections-grid">
+          <div class="mono-box">
+            <h4 class="mono-box-title"><span class="box-icon">🔬</span> Bioactive Phytochemicals</h4>
+            <ul class="mono-list" id="mono-phytochemicals">
+              <li>Azadirachtin (tetranortriterpenoid)</li>
+              <li>Nimbin &amp; Nimbidin</li>
+              <li>Gedunin</li>
+              <li>Quercetin</li>
+            </ul>
+          </div>
+
+          <div class="mono-box">
+            <h4 class="mono-box-title"><span class="box-icon">💊</span> Pharmacological Actions</h4>
+            <ul class="mono-list" id="mono-actions">
+              <li>Broad-spectrum antimicrobial &amp; antifungal</li>
+              <li>Hypoglycemic / Antidiabetic regulation</li>
+              <li>Anti-inflammatory and hepatoprotective</li>
+            </ul>
+          </div>
+
+          <div class="mono-box">
+            <h4 class="mono-box-title"><span class="box-icon">🩺</span> Therapeutic Indications</h4>
+            <ul class="mono-list" id="mono-indications">
+              <li>Skin dermatoses, eczema, psoriasis</li>
+              <li>Dental gingivitis and oral biofilm</li>
+              <li>Type 2 diabetes glycemic regulation</li>
+            </ul>
+          </div>
+
+          <div class="mono-box">
+            <h4 class="mono-box-title"><span class="box-icon">⚠️</span> Preparations &amp; Safety</h4>
+            <p class="mono-text" id="mono-prep">Leaf decoction (Kashayam), fresh foliar paste, medicated neem oil for topical application.</p>
+            <p class="mono-caution" id="mono-safety">Caution: Avoid high-dose internal use during pregnancy or lactation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Hardware Benchmarking & Evaluation Hub -->
+    <section id="benchmark" class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Hardware Benchmarks &amp; Academic Metrics</h2>
+          <p class="section-subtitle">Real-time inference speed benchmark and test set evaluation on 40 medicinal plant classes</p>
+        </div>
+      </div>
+
+      <div class="benchmark-grid">
+        <div class="glass-card bench-card">
+          <div class="bench-header">
+            <h3 class="card-title">Tri-Branch Inference Speed Benchmark</h3>
+            <button type="button" class="btn btn-sm btn-secondary" id="btn-run-benchmark">Run Live Benchmark</button>
+          </div>
+          <div class="bench-stats-row">
+            <div class="bench-stat">
+              <span class="bench-val" id="b-latency">~112 ms</span>
+              <span class="bench-lbl">Latency / Image (CPU)</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val" id="b-fps">8.9 FPS</span>
+              <span class="bench-lbl">Throughput</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val" id="b-params">~58.4 M</span>
+              <span class="bench-lbl">Total Parameters</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val highlight-green" id="b-savings">Tri-Synergy</span>
+              <span class="bench-lbl">Swin + Mamba + MaxViT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card bench-card">
+          <h3 class="card-title">Test Set Evaluation Metrics (40 Classes)</h3>
+          <div class="bench-stats-row">
+            <div class="bench-stat">
+              <span class="bench-val" id="m-acc">98.2%</span>
+              <span class="bench-lbl">Top-1 Accuracy</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val" id="m-f1">98.1%</span>
+              <span class="bench-lbl">Macro F1-Score</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val" id="m-prec">98.0%</span>
+              <span class="bench-lbl">Macro Precision</span>
+            </div>
+            <div class="bench-stat">
+              <span class="bench-val" id="m-rec">98.1%</span>
+              <span class="bench-lbl">Macro Recall</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p class="footer-text">
+        PhytoExplain 3.0 &middot; Final Year Academic Project &middot; 
+        Tri-Branch Architecture: Swin Transformer + Visual Mamba (SSM) + MaxViT-T Multi-Axis Vision Transformer.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

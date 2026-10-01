@@ -1,0 +1,58 @@
+# Explainable Medicinal Plant Identification System Configuration
+# Novel Tri-Branch Architecture: Swin-T + VMamba-T (VSSM) + MaxViT-T with Tri-Cross-Attention Fusion
+
+project:
+  name: "Tri-Explainable-Medicinal-Plant-Identification"
+  version: "3.0.0"
+  architecture: "Tri-Branch (Swin-T + VMamba-T + MaxViT-T)"
+  seed: 42
+
+data:
+  dataset_dir: "dataset"                # Dataset root containing train/val/test splits
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+  img_size: 224
+  batch_size: 32
+  num_workers: 0
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+
+model:
+  branches:
+    - name: "swin_t"
+      description: "Shifted Window Multi-Head Attention (Boundary morphology & margin serrations)"
+      dim: 768
+    - name: "vmamba_t"
+      description: "Visual State Space Model SS2D (Continuous directional venation propagation)"
+      dim: 768
+    - name: "maxvit_t"
+      description: "Multi-Axis Block + Dilated Grid Attention (Micro-texture & global blade symmetry)"
+      dim: 512
+  use_pretrained: true
+  fusion_type: "tri_cross_attention"    # Options: 'tri_cross_attention', 'tri_gated', 'tri_concat'
+  fusion_dim: 512
+  dropout: 0.3
+  num_classes: 40                       # 40 medicinal plant species
+
+training:
+  epochs: 15
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  scheduler: "cosine"
+  min_lr: 0.00001
+  warmup_epochs: 2
+  early_stopping_patience: 5
+  checkpoint_dir: "checkpoints"
+  save_best_only: true
+
+explainability:
+  cam_methods: ["swin_layercam", "vmamba_statecam", "maxvit_multiaxis_cam", "tri_fused_consensus"]
+  faithfulness_mask_ratio: 0.20         # 20% salient pixel masking for quantitative validation
+  colormap: "turbo"                     # 'turbo', 'jet', 'viridis', 'inferno'
+  alpha_overlay: 0.55
+
+server:
+  host: "127.0.0.1"
+  port: 8000
+  reload: false
